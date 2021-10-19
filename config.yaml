@@ -3,22 +3,23 @@ password:
 
 positions:
 - Data Scientist
-- # Another position you want to search for
-- # A third position you want to search for
 
 locations:
 - Remote
-- # A second location you want to search in 
+# - California
+# - US 
+# - USA
+# - New York
 
 # --------- Optional Parameters -------
-# uploads:
-#  Resume: # PATH TO Resume 
-#  Cover Letter: # PATH TO cover letter
-#  Photo: # PATH TO photo
+uploads:
+ Resume: /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/resume.pdf
+ Cover Letter: /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/cl.pdf
+ Photo: /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/photo.jpeg
 
 
-# output_filename:
-# - # PATH TO OUTPUT FILE (default output.csv)
+output_filename:
+- /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/output.csv
 
 # blacklist:
 # - # Company names you want to ignore
