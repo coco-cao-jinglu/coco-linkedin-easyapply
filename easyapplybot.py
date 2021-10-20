@@ -82,6 +82,7 @@ class EasyApplyBot:
             return jobIDs
         except Exception as e:
             log.info(str(e) + "   jobIDs could not be loaded from CSV {}".format(filename))
+            print('no job satisying specification can be found. pls modify your requirements')
             return None
 
     def browser_options(self):
@@ -112,6 +113,7 @@ class EasyApplyBot:
             time.sleep(3)
         except TimeoutException:
             log.info("TimeoutException! Username/password field or login button not found")
+        print('cannot log into LinkedIn. pls make sure you disallow 2-factor verification and give system permission to python.')
 
     def fill_data(self):
         self.browser.set_window_size(0, 0)
@@ -451,3 +453,4 @@ if __name__ == '__main__':
     locations = [l for l in parameters['locations'] if l != None]
     positions = [p for p in parameters['positions'] if p != None]
     bot.start_apply(positions, locations)
+    print('job done')
