@@ -1,0 +1,34 @@
+username: 
+- XXXX@gmail.com
+
+password: 
+- XXX
+
+positions:
+- Data Scientist
+
+locations:
+- Remote
+# - California
+# - US 
+# - USA
+# - New York
+
+# --------- Optional Parameters -------
+uploads:
+ Resume: 
+ - /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/resume.pdf
+ Cover Letter:
+ - /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/cl.pdf
+ Photo:
+ - /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/uploads/photo.jpeg
+
+
+output_filename:
+- /Users/coco/Desktop/school/w241/final/LinkedIn-Easy-Apply-Bot/output.csv
+
+# blacklist:
+# - # Company names you want to ignore
+
+#blackListTitles:
+#- # Add job titles you want to ignore
