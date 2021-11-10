@@ -107,9 +107,9 @@ class EasyApplyBot:
         log.info("Logging in.....Please wait :)  ")
         self.browser.get("https://www.linkedin.com/login?trk=guest_homepage-basic_nav-header-signin")
         try:
-            user_field = self.browser.find_element_by_id("username")
-            pw_field = self.browser.find_element_by_id("password")
-            login_button = self.browser.find_element_by_css_selector(".btn__primary--large")
+            user_field = self.browser.find_element(By.ID, "username")
+            pw_field = self.browser.find_element(By.ID, "password")
+            login_button = self.browser.find_element(By.CSS_SELECTOR, ".btn__primary--large")
             user_field.send_keys(username)
             user_field.send_keys(Keys.TAB)
             time.sleep(2)
@@ -119,10 +119,11 @@ class EasyApplyBot:
             time.sleep(3)
         except TimeoutException:
             log.info("TimeoutException! Username/password field or login button not found")
-        print('cannot log into LinkedIn. pls make sure you disallow 2-factor verification and give system permission to python.')
+            print('cannot log into LinkedIn. pls make sure you disallow 2-factor verification and give system permission to python.')
 
     def fill_data(self):
-        self.browser.set_window_size(0, 0)
+        # self.browser.set_window_size(0, 0)
+        self.browser.set_window_size(1024, 768)
         self.browser.set_window_position(2000, 2000)
 
     def start_apply(self, positions, locations):
@@ -150,7 +151,7 @@ class EasyApplyBot:
 
             log.info("Looking for jobs.. Please wait..")
             # one needs to log into LinkedIn with any profile to be able to find jobs
-            self.start_linkedin[self.username[0], self.password[0]]
+            self.start_linkedin(self.username[0], self.password[0])
 
             self.browser.set_window_position(0, 0)
             self.browser.maximize_window()
@@ -169,7 +170,7 @@ class EasyApplyBot:
 
                     # LinkedIn displays the search results in a scrollable <div> on the left side, we have to scroll to its bottom
 
-                    scrollresults = self.browser.find_element_by_class_name(
+                    scrollresults = self.browser.find_element(By.CLASS_NAME,
                         "jobs-search-results"
                     )
                     # Selenium only detects visible elements; if we scroll to the bottom too fast, only 8-9 results will be loaded into IDs list
@@ -179,7 +180,7 @@ class EasyApplyBot:
                     time.sleep(1)
 
                     # get job links
-                    links = self.browser.find_elements_by_xpath(
+                    links = self.browser.find_elements(By.XPATH,
                         '//div[@data-job-id]'
                     )
 
@@ -189,7 +190,7 @@ class EasyApplyBot:
                     # get job ID of each job link
                     IDs = []
                     for link in links:
-                        children = link.find_elements_by_xpath(
+                        children = link.find_elements(By.XPATH,
                             './/a[@data-control-name]'
                         )
                         for child in children:
@@ -213,6 +214,9 @@ class EasyApplyBot:
                         self.browser, jobs_per_page = self.next_jobs_page(combo[0],
                                                                         combo[1],
                                                                         jobs_per_page)
+
+                except Exception as e:
+                    print(e)
 
         # remove job IDs without LinkedIn easy apply button
         for i, jobID in enumerate(self.jobIDs_surveyed):
@@ -254,7 +258,7 @@ class EasyApplyBot:
                     time.sleep(3)
                     result = self.send_resume(i)
                     n_applications += 1
-                    self.write_to_file(button, jobID, self.browser.title, result)
+                    self.write_to_file(button, i, jobID, self.browser.title, result)
 
                     if n_applications != 0 and n_applications % 20 == 0:
                         sleepTime = random.randint(500, 900)
@@ -268,7 +272,7 @@ class EasyApplyBot:
 
     
 
-    def write_to_file(self, button, jobID, browserTitle, result):
+    def write_to_file(self, button, profileID, jobID, browserTitle, result):
         def re_extract(text, pattern):
             target = re.search(pattern, text)
             if target:
@@ -280,7 +284,7 @@ class EasyApplyBot:
         job = re_extract(browserTitle.split(' | ')[0], r"\(?\d?\)?\s?(\w.*)")
         company = re_extract(browserTitle.split(' | ')[1], r"(\w.*)")
 
-        toWrite = [timestamp, jobID, job, company, attempted, result]
+        toWrite = [timestamp, profileID, jobID, job, company, attempted, result]
         with open(self.filename, 'a') as f:
             writer = csv.writer(f)
             writer.writerow(toWrite)
@@ -411,7 +415,7 @@ class EasyApplyBot:
     def next_jobs_page(self, position, location, jobs_per_page):
         self.browser.get(
             "https://www.linkedin.com/jobs/search/?f_LF=f_AL&keywords=" +
-            position + location + "&start=" + str(jobs_per_page))
+            position + '&location=' + location + "&start=" + str(jobs_per_page))
         self.avoid_lock()
         log.info("Lock avoided.")
         self.load_page()
